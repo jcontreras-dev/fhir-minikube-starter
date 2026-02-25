@@ -1,3 +1,17 @@
+# Prubas de funcionamiento
+
+![HAPI funcionando](image.png)
+
+pruebas 
+del visual code  (Jesus Contreras , Juan Escarraga )
+<img width="1863" height="1079" alt="image" src="https://github.com/user-attachments/assets/7cc8d5dc-702f-43fb-b3b5-a15b847f9fe1" />
+
+
+
+
+
+
+
 # FHIR + Minikube + Nginx (CRUD simple)
 
 Proyecto educativo para mostrar **programación declarativa** con Kubernetes:
