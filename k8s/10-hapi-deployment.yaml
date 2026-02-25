@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hapi
+  namespace: fhir-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hapi
+  template:
+    metadata:
+      labels:
+        app: hapi
+    spec:
+      name: hapi
+    image: hapiproject/hapi:latest
+    ports: [{ containerPort: 8080 }]
+    readinessProbe:
+      httpGet: { path: /fhir/metadata, port: 8080 }
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 30
+    livenessProbe:
+      httpGet: { path: /fhir/metadata, port: 8080 }
+      initialDelaySeconds: 90
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 10
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "1"
+        memory: "2Gi"

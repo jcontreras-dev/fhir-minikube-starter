@@ -1,0 +1,5 @@
+{
+  "resourceType": "Practitioner",
+  "name": [ { "family": "Pérez", "given": ["Luis"] } ],
+  "qualification": [ { "code": { "text": "MD" } } ]
+}

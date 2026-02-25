@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  namespace: fhir-demo
+data:
+  nginx.conf: |
+    events {}
+    http {
+      upstream hapi_upstream {
+        server hapi.fhir-demo.svc.cluster.local:8080;
+      }
+      server {
+        listen 80;
+        # Proxy todo, incluido /fhir
+        location / {
+          proxy_pass http://hapi_upstream;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+      }
+    }
