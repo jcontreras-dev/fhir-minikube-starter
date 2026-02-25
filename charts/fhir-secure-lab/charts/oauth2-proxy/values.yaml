@@ -1,0 +1,4 @@
+image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
+service:
+  type: ClusterIP
+  port: 4180

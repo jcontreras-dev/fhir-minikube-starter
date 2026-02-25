@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hapi-postgres-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: {{ .Values.postgresHapi.storage }}
+  storageClassName: standard
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hapi-postgres
+  namespace: {{ .Values.global.namespace }}
+  labels: { app: hapi-postgres }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: hapi-postgres }
+  template:
+    metadata:
+      labels: { app: hapi-postgres }
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgresHapi.image }}
+          ports: [{ containerPort: 5432 }]
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.postgresHapi.database }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.postgresHapi.username }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.postgresHapi.password }}"
+          readinessProbe:
+            exec: { command: ["/bin/sh","-c","pg_isready -U {{ .Values.postgresHapi.username }} -d {{ .Values.postgresHapi.database }}"] }
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 5432 }
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          volumeMounts:
+            - { name: data, mountPath: /var/lib/postgresql/data }
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: hapi-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hapi-postgres
+  namespace: {{ .Values.global.namespace }}
+spec:
+  selector: { app: hapi-postgres }
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

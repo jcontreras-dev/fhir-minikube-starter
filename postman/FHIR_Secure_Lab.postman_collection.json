@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "FHIR Secure Lab",
+    "_postman_id": "fhir-secure-lab-collection",
+    "description": "Requests for HAPI through Envoy (JWT-protected). Acquire tokens from Keycloak (Client Credentials / Auth Code).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET CapabilityStatement (requires Bearer)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": "http://fhir.local/fhir/metadata"
+      }
+    },
+    {
+      "name": "GET Patients (requires Bearer)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": "http://fhir.local/fhir/Patient"
+      }
+    }
+  ]
+}
