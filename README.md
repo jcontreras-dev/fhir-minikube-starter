@@ -1,4 +1,4 @@
-# Prubas de funcionamiento
+# Pruebas de funcionamiento
 
 ![HAPI funcionando](image.png)
 
